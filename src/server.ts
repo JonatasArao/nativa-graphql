@@ -1,12 +1,32 @@
 import express from 'express';
 import morgan from 'morgan';
 import apiRoutes from '@/api/routes';
+import { ApolloServer } from '@apollo/server';
+import { expressMiddleware } from '@as-integrations/express5';
+import { readFileSync } from 'fs';
+import path from 'path';
+import { resolvers } from './graphql/resolvers';
+const typeDefs = readFileSync(path.join(__dirname, 'graphql/schema.graphql'), 'utf-8');
 
 const app = express();
 
-app.use(express.json());
-app.use(morgan('dev'));
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+});
 
-app.use('/', apiRoutes);
+export const startServer = async () => {
+  await server.start();
 
-export default app;
+  app.use(morgan('dev'));
+  
+  app.use('/', apiRoutes);
+
+  app.use(
+    '/graphql',
+    express.json(),
+    expressMiddleware(server)
+  );
+
+  return app;
+}

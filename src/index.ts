@@ -1,6 +1,12 @@
-import app from '@/server';
+import { startServer } from '@/server';
 import { config } from '@/config';
 
-app.listen(config.port, () => {
-  console.log(`🚀 Servidor rodando na porta ${config.port}`);
-});
+async function main() {
+  const app = await startServer();
+  app.listen(config.port, () => {
+    console.log(`🚀 Servidor de dicas rodando em ${config.port}/dica-do-dia`);
+    console.log(`🚀 Servidor GraphQL rodando em http://localhost:${config.port}/graphql`);
+  });
+}
+
+main();

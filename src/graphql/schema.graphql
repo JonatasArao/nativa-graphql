@@ -1,0 +1,26 @@
+type Line {
+  id: ID!
+  name: String!
+  concept: String
+  description: String
+}
+
+type Product {
+  id: ID!
+  name: String!
+  variant: String
+  keyIngredients: [String!]
+  description: String
+  altText: String
+  price: Float
+  currency: String
+  onSale: Boolean
+  promotionalPrice: Float
+  isAvailable: Boolean
+  line: Line
+}
+
+type Query {
+  product(id: ID!): Product
+  productsPerLine(linhaId: ID!): [Product!]!
+}

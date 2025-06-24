@@ -1,0 +1,80 @@
+[
+  {
+    "id": "L001",
+    "name": "YVY",
+    "description": "Foco em bioativos da biodiversidade brasileira, nome curto com ressonância natural/indígena",
+    "concept": "\"Yvy\" significa \"terra\" ou \"solo\" em tupi-guarani. Esta linha traria a força e a pureza dos ingredientes mais autênticos de cada bioma brasileiro, a essência da nossa terra."
+  },
+  {
+    "id": "L002",
+    "name": "BemViver",
+    "description": "Foco no cuidado diário do corpo, nome expressando uma rotina ou sentimento",
+    "concept": "Celebra o bem-estar essencial em cada momento do dia, com produtos que nutrem o corpo e a alma de forma prática e prazerosa."
+  },
+  {
+    "id": "L003",
+    "name": "Tempus",
+    "description": "Foco em tecnologia antissinais para o rosto, nome com conotação de tempo/ciência",
+    "concept": "Combina a sabedoria ancestral da natureza com a ciência moderna para o cuidado e a renovação da pele ao longo do tempo, respeitando cada fase da vida."
+  },
+  {
+    "id": "L004",
+    "name": "Candeia",
+    "description": "Foco em tratamento capilar de alta performance, nome ligado à luz/brilho",
+    "concept": "Ilumina a beleza natural dos seus cabelos, revelando o brilho e a vitalidade que vêm da essência de ativos botânicos."
+  },
+  {
+    "id": "L005",
+    "name": "Flora",
+    "description": "Foco em cuidados capilares com ativos vegetais, nome direto",
+    "concept": "Cuidado capilar que celebra a riqueza da flora brasileira, com fórmulas suaves e eficazes para o dia a dia."
+  },
+  {
+    "id": "L006",
+    "name": "Unica",
+    "description": "Foco em maquiagem premium, nome ligado à singularidade",
+    "concept": "maquiagem que realça a beleza única de cada pessoa, com ingredientes naturais, texturas sofisticadas e cores inspiradas na diversidade brasileira."
+  },
+  {
+    "id": "L007",
+    "name": "Spira",
+    "description": "Foco em maquiagem e cuidados faciais para público jovem, nome curto e expressivo",
+    "concept": "Expressa a sua beleza e individualidade de forma leve e versátil, com produtos práticos para rituais de autoexpressão."
+  },
+  {
+    "id": "L008",
+    "name": "Seiva",
+    "description": "Foco em óleos corporais, nome ligado à essência vital das plantas",
+    "concept": "Óleos corporais que nutrem profundamente a pele, envolvendo-a com a pura essência e vitalidade da natureza."
+  },
+  {
+    "id": "L009",
+    "name": "Impeto",
+    "description": "Foco em perfumaria com frescor, movimento, aventura",
+    "concept": "Fragrâncias que inspiram movimento, liberdade e a energia vibrante da naturezas e das emoções."
+  },
+  {
+    "id": "L010",
+    "name": "Essentia",
+    "description": "Foco em perfumaria sofisticada, nome ligado ao fundamental",
+    "concept": "Perfumes que capturam a essência da sofisticação e da singularidade, para momentos marcantes. Alinha-se perfeitamente com o slogan da \"Nativa\"."
+  },
+  {
+    "id": "L011",
+    "name": "Anima",
+    "description": "Foco em perfumaria mais jovem e irreverente, nome ligado a emoções",
+    "concept": "Fragrâncias que celebram o ânimo, a alegria de viver e as diferentes facetas do espírito."
+  },
+  {
+    "id": "L012",
+    "name": "Ninhar e Florir",
+    "description": "Foco em produtos para gestantes e bebês, nome expressando cuidado e fases",
+    "concept": "Cuidado e afeto em forma de produtos suaves para acolher a mãe e o bebê, celebrando o florescer de uma nova vida e o vínculo essencial."
+  },
+  {
+    "id": "L013",
+    "name": "Capim Cidreira",
+    "description": "Foco em linha clássica com nome de ingrediente conhecido pela suavidade",
+    "concept": "Produtos com a suavidade e o frescor reconfortante do Capim Cidreira, para um cuidado delicado e tradicional."
+  }
+]
