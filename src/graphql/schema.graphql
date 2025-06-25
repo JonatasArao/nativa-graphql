@@ -20,10 +20,14 @@ type Product {
   line: Line
 }
 
+input ProductFilterInput {
+  lineId: ID
+  query: String
+}
+
 type Query {
   product(id: ID!): Product
-  products(lineId: ID!): [Product!]!
-  productsSearch(query: String!): [Product!]!
+  products(filter: ProductFilterInput): [Product!]!
   line(id: ID!): Line
   lines: [Line!]!
 }

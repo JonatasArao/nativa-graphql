@@ -1,5 +1,6 @@
 import { LineService } from '@/services/line.service'
 import { ProductService } from '@/services/product.service'
+import { ProductFilterInput } from '@/models/productFilter.model'
 
 interface ProductParent {
   lineId: string;
@@ -10,11 +11,8 @@ export const resolvers = {
     product: (_: any, args: { id: string }) => {
       return ProductService.getById(args.id);
     },
-    products: (_: any, args: { lineId: string }) => {
-      return ProductService.getByLine(args.lineId);
-    },
-    productsSearch: (_: any, args: { query: string }) => {
-      return ProductService.searchQuery(args.query);
+    products: (_: any, args: { filter: ProductFilterInput }) => {
+      return ProductService.findProducts(args.filter);
     },
     line: (_: any, args: { id: string }) => {
       return LineService.getById(args.id);
