@@ -1,5 +1,5 @@
-import products from '@/data/productList.json';
-import lines from '@/data/lineList.json';
+import { LineService } from '@/services/line.service'
+import { ProductService } from '@/services/product.service'
 
 interface ProductParent {
   lineId: string;
@@ -8,15 +8,24 @@ interface ProductParent {
 export const resolvers = {
   Query: {
     product: (_: any, args: { id: string }) => {
-      return products.find(p => p.id === args.id) || null;
+      return ProductService.getById(args.id);
     },
-    productsPerLine: (_: any, args: { linhaId: string }) => {
-      return products.filter(p => p.lineId === args.linhaId);
+    products: (_: any, args: { lineId: string }) => {
+      return ProductService.getByLine(args.lineId);
     },
+    productsSearch: (_: any, args: { query: string }) => {
+      return ProductService.searchQuery(args.query);
+    },
+    line: (_: any, args: { id: string }) => {
+      return LineService.getById(args.id);
+    },
+    lines: (_: any) => {
+      return LineService.getAll();
+    }
   },
   Product: {
     line: (parent: ProductParent) => {
-      return lines.find(l => l.id === parent.lineId) || null;
+      return LineService.getById(parent.lineId);
     },
   },
 };

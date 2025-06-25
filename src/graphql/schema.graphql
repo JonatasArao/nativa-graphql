@@ -22,5 +22,8 @@ type Product {
 
 type Query {
   product(id: ID!): Product
-  productsPerLine(linhaId: ID!): [Product!]!
+  products(lineId: ID!): [Product!]!
+  productsSearch(query: String!): [Product!]!
+  line(id: ID!): Line
+  lines: [Line!]!
 }
