@@ -10,13 +10,13 @@ interface ProductParent {
 export const resolvers = {
   Query: {
     product: (_: any, args: { id: string }) => {
-      return ProductService.getById(args.id);
+      return ProductService.getProduct(args.id);
     },
     products: (_: any, args: { filter?: ProductFilterInput }) => {
       return ProductService.getProducts(args.filter || {});
     },
     line: (_: any, args: { id: string }) => {
-      return LineService.getById(args.id);
+      return LineService.getLine(args.id);
     },
     lines: (_: any, args: { filter?: LineFilterInput }) => {
       return LineService.getLines(args.filter || {});
@@ -24,7 +24,7 @@ export const resolvers = {
   },
   Product: {
     line: (parent: ProductParent) => {
-      return LineService.getById(parent.lineId);
+      return LineService.getLine(parent.lineId);
     },
   },
 };

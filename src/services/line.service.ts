@@ -26,7 +26,7 @@ export class LineService {
     return filteredLines;
   }
 
-  static getById(id : string) : Line | undefined {
+  static getLine(id : string) : Line | undefined {
     return (lineList as Line[]).find(l => l.id === id);
   }
 

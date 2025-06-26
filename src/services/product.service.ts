@@ -15,7 +15,7 @@ export class ProductService {
   }
 
   private static filterByLineId(products : Product[], lineId : string) : Product[] {
-    const line = LineService.getById(lineId)
+    const line = LineService.getLine(lineId)
     if (!line) {
       return [];
     }
@@ -46,13 +46,13 @@ export class ProductService {
       .filter((p): p is Product => p !== null);
   }
 
-  static getById(id : string) : Product | undefined {
+  static getProduct(id : string) : Product | undefined {
     return (productList as Product[]).find(p => p.id === id);
   }
 
   static getProducts(filter? : ProductFilterInput ) : Product[] {
     const { lineId, query } = filter || {};
-    
+
     let products = this.getAll();
     if (lineId) {
       products = this.filterByLineId(products, lineId);
