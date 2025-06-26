@@ -4,3 +4,7 @@ export interface Line {
 	description: string;
 	concept: string;
 }
+
+export interface LineFilterInput {
+  query?: string;
+}

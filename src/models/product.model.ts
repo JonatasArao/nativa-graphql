@@ -12,3 +12,8 @@ export interface Product {
 	promotionalPrice: number;
 	isAvailable: boolean;
 }
+
+export interface ProductFilterInput {
+  lineId?: string;
+  query?: string;
+}

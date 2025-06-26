@@ -25,9 +25,13 @@ input ProductFilterInput {
   query: String
 }
 
+input LineFilterInput {
+  query: String
+}
+
 type Query {
   product(id: ID!): Product
   products(filter: ProductFilterInput): [Product!]!
   line(id: ID!): Line
-  lines: [Line!]!
+  lines(filter: LineFilterInput): [Line!]!
 }

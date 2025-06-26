@@ -1,16 +1,23 @@
 import productList from '@/data/productList.json';
-import { Product } from "@/models/product.model";
-import { ProductFilterInput } from "@/models/productFilter.model";
+import { Product, ProductFilterInput } from "@/models/product.model";
 import { LineService } from '@/services/line.service';
 import { normalizeString } from "@/utils/string";
 
 export class ProductService {
-  private static lineMap = new Map(LineService.getAll().map(line => [line.id, line]));
+  private static toSearchableText(product: Product): string {
+      return [
+        product.id,
+        product.name,
+        product.variant,
+        product.description,
+        product.keyIngredients.join(' ')
+      ].join(' ');
+  }
 
   private static filterByLineId(products : Product[], lineId : string) : Product[] {
-    const line = this.lineMap.get(lineId);
+    const line = LineService.getById(lineId)
     if (!line) {
-      throw new Error(`[ProductService] The line with ID ${lineId} was not found.`);
+      return [];
     }
 
     return (products)
@@ -20,15 +27,7 @@ export class ProductService {
   private static filterByQueryText(products : Product[], query : string) : Product[] {
     const normalizedQuery = normalizeString(query);
     const matchingLineIds = new Set<string>(
-      LineService.getAll()
-      .filter(line => {
-        const searchableLineText = [
-          line.name,
-          line.concept,
-          line.description
-        ].join(' ');
-        return normalizeString(searchableLineText).includes(normalizedQuery);
-      })
+      LineService.getLines({ query })
       .map(line => line.id)
     );
     const filteredProducts = products
@@ -36,33 +35,31 @@ export class ProductService {
         if (matchingLineIds.has(product.lineId)) {
             return true;
         }
-        const searchableProductText = [
-            product.id,
-            product.name,
-            product.variant,
-            product.description,
-            product.keyIngredients.join(' ')
-        ].join(' ');
+        const searchableProductText = this.toSearchableText(product);
         return normalizeString(searchableProductText).includes(normalizedQuery);
     });
-    return filteredProducts
-        .filter((p): p is Product => p !== null);
+    return filteredProducts;
   }
 
-  static getAll() : Product[] {
+  private static getAll() : Product[] {
     return (productList as Product[])
       .filter((p): p is Product => p !== null);
   }
 
   static getById(id : string) : Product | undefined {
-    const product = (productList as Product[]).find(p => p.id === id);
-    if (!product) {
-      return undefined;
-    }
-    return product ?? undefined;
+    return (productList as Product[]).find(p => p.id === id);
   }
 
-  static findProducts(filter : ProductFilterInput ) : Product[] {
-    return [];
+  static getProducts(filter? : ProductFilterInput ) : Product[] {
+    const { lineId, query } = filter || {};
+    
+    let products = this.getAll();
+    if (lineId) {
+      products = this.filterByLineId(products, lineId);
+    }
+    if (query) {
+      products = this.filterByQueryText(products, query);
+    }
+    return products;
   }
 }
