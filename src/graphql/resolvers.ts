@@ -1,11 +1,7 @@
 import { LineService } from '@/services/line.service'
 import { ProductService } from '@/services/product.service'
-import { ProductFilterInput } from '@/models/product.model'
+import { ProductParent, ProductFilterInput } from '@/models/product.model'
 import { LineFilterInput } from '@/models/line.model'
-
-interface ProductParent {
-  lineId: string;
-}
 
 export const resolvers = {
   Query: {

@@ -13,6 +13,10 @@ export interface Product {
 	isAvailable: boolean;
 }
 
+export interface ProductParent {
+  lineId: string;
+}
+
 export interface ProductFilterInput {
   lineId?: string;
   query?: string;
