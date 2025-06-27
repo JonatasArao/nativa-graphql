@@ -12,6 +12,7 @@ model Line {
   name        String    @unique
   concept     String?
   description String?
+  searchableText String    @default("")
   products    Product[]
 }
 
@@ -27,6 +28,7 @@ model Product {
   onSale           Boolean?
   promotionalPrice Float?
   isAvailable      Boolean?
+  searchableText   String    @default("")
   line             Line? @relation(fields: [lineId], references: [id])
   lineId           String?
 }

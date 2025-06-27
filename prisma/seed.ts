@@ -1,6 +1,7 @@
 import { PrismaClient } from '@prisma/client';
-import productList from '../data/productList.json';
-import lineList from '../data/lineList.json';
+import productList from './data/productList.json';
+import lineList from './data/lineList.json';
+import { normalizeString } from '../src/utils/string'
 
 const prisma = new PrismaClient();
 
@@ -11,26 +12,37 @@ async function main() {
   await prisma.line.deleteMany({});
   console.log('Tabelas limpas.');
 
-  await prisma.line.createMany({
-    data: lineList,
-  });
+  for (const line of lineList) {
+    const { id, name, concept, description } = line || '';
+
+    const searchableText = normalizeString(`${id} ${name} ${concept} ${description}`);
+
+    await prisma.line.create({
+      data: {
+        id, name, concept, description, searchableText
+      },
+    });
+  }
   console.log(`${lineList.length} linhas de produtos criadas.`);
 
   for (const product of productList) {
+    const { 
+      id, lineId, name,
+      variant, keyIngredients, description,
+      altText, price, currency,
+      onSale, promotionalPrice, isAvailable,
+    } = product || '';
+
+    const searchableText = normalizeString(`${id} ${name} ${variant} ${description} ${keyIngredients.join(' ')}`);
+
     await prisma.product.create({
       data: {
-        id: product.id,
-        lineId: product.lineId,
-        name: product.name,
-        variant: product.variant,
-        keyIngredients: JSON.stringify(product.keyIngredients),
-        description: product.description,
-        altText: product.altText,
-        price: product.price,
-        currency: product.currency,
-        onSale: product.onSale,
-        promotionalPrice: product.promotionalPrice,
-        isAvailable: product.isAvailable,
+        id, lineId, name,
+        variant, description,
+        keyIngredients: JSON.stringify(keyIngredients),
+        altText, price, currency,
+        onSale, promotionalPrice, isAvailable,
+        searchableText
       },
     });
   }

@@ -1,42 +1,32 @@
-import lineList from '../../data/lineList.json';
+import { PrismaClient } from '@prisma/client';
 import { Line, LineFilterInput } from "@/models/line.model";
 import { normalizeString } from '@/utils/string';
 
 export class LineService {
-  private static getAll() : Line[] {
-    return (lineList as Line[])
-          .filter((l): l is Line => l !== null);;
+  private prisma: PrismaClient;
+
+  constructor(prisma: PrismaClient) {
+    this.prisma = prisma;
   }
 
-  private static toSearchableText(line: Line): string {
-    return [
-      line.id,
-      line.name,
-      line.concept,
-      line.description
-    ].join(' ');
+  async getLine(id : string): Promise<Line | null> {
+    return await this.prisma.line.findUnique({
+      where: { id },
+    });
   }
 
-  private static filterByQueryText(lines : Line[], query : string) : Line[] {
-    const normalizedQuery = normalizeString(query);
-    const filteredLines = lines.filter(line => {
-      const searchableLineText = this.toSearchableText(line);
-      return normalizeString(searchableLineText).includes(normalizedQuery);
-    })
-    return filteredLines;
-  }
+  async getLines(filter?: LineFilterInput): Promise<Line[] | null> {
+    const { query } = filter || {};
+    const normalizedQuery = normalizeString(query || '');
 
-  static getLine(id : string) : Line | undefined {
-    return (lineList as Line[]).find(l => l.id === id);
-  }
-
-  static getLines(filter? : LineFilterInput) : Line[] {
-    const { query } = filter || {}
-
-    let lines = this.getAll();
-    if (query) {
-      lines = this.filterByQueryText(lines, query);
-    }
-    return lines  
+    return await this.prisma.line.findMany({
+      where: query
+        ? {
+            searchableText: {
+              contains: normalizedQuery,
+            },
+          }
+        : {},
+    });
   }
 }
