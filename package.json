@@ -5,7 +5,8 @@
   "scripts": {
     "build": "tsc",
     "start": "node dist/index.js",
-    "dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node -r tsconfig-paths/register' src/index.ts"
+    "dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node -r tsconfig-paths/register' src/index.ts",
+    "prisma:seed": "ts-node prisma/seed.ts"
   },
   "repository": {
     "type": "git",
@@ -22,6 +23,7 @@
   "dependencies": {
     "@apollo/server": "^4.12.2",
     "@as-integrations/express5": "^1.1.0",
+    "@prisma/client": "^6.10.1",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "graphql": "^16.11.0",
@@ -32,6 +34,7 @@
     "@types/morgan": "^1.9.10",
     "@types/node": "^24.0.3",
     "nodemon": "^3.1.10",
+    "prisma": "^6.10.1",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.8.3"

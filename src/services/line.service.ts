@@ -1,4 +1,4 @@
-import lineList from '@/data/lineList.json';
+import lineList from '../../data/lineList.json';
 import { Line, LineFilterInput } from "@/models/line.model";
 import { normalizeString } from '@/utils/string';
 

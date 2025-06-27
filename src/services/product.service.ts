@@ -1,4 +1,4 @@
-import productList from '@/data/productList.json';
+import productList from '../../data/productList.json';
 import { Product, ProductFilterInput } from "@/models/product.model";
 import { LineService } from '@/services/line.service';
 import { normalizeString } from "@/utils/string";
