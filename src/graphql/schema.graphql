@@ -20,6 +20,12 @@ type Product {
   line: Line
 }
 
+type User {
+  id: ID!
+  name: String!
+  email: String!
+}
+
 input ProductFilterInput {
   lineId: ID
   query: String
@@ -34,4 +40,8 @@ type Query {
   products(filter: ProductFilterInput): [Product!]!
   line(id: ID!): Line
   lines(filter: LineFilterInput): [Line!]!
+}
+
+type Mutation {
+  registerUser(name: String!, email: String!): User
 }
