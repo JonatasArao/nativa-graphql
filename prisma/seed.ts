@@ -10,6 +10,7 @@ async function main() {
 
   await prisma.product.deleteMany({});
   await prisma.line.deleteMany({});
+  await prisma.user.deleteMany({});
   console.log('Tabelas limpas.');
 
   for (const line of lineList) {
