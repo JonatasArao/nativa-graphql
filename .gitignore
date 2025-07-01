@@ -127,3 +127,9 @@ dist
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+
+# Prisma
+/src/generated/prisma
+/prisma/migrations
+/prisma/dev.db
+

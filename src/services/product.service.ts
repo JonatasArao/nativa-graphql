@@ -1,65 +1,56 @@
-import productList from '@/data/productList.json';
+import { PrismaClient } from '@prisma/client';
 import { Product, ProductFilterInput } from "@/models/product.model";
-import { LineService } from '@/services/line.service';
 import { normalizeString } from "@/utils/string";
 
 export class ProductService {
-  private static toSearchableText(product: Product): string {
-      return [
-        product.id,
-        product.name,
-        product.variant,
-        product.description,
-        product.keyIngredients.join(' ')
-      ].join(' ');
+  private prisma: PrismaClient;
+
+  constructor(prisma: PrismaClient) {
+    this.prisma = prisma;
   }
 
-  private static filterByLineId(products : Product[], lineId : string) : Product[] {
-    const line = LineService.getLine(lineId)
-    if (!line) {
-      return [];
-    }
-
-    return (products)
-      .filter(p => p.lineId === lineId)
-  }
-
-  private static filterByQueryText(products : Product[], query : string) : Product[] {
-    const normalizedQuery = normalizeString(query);
-    const matchingLineIds = new Set<string>(
-      LineService.getLines({ query })
-      .map(line => line.id)
-    );
-    const filteredProducts = products
-      .filter(product => {
-        if (matchingLineIds.has(product.lineId)) {
-            return true;
-        }
-        const searchableProductText = this.toSearchableText(product);
-        return normalizeString(searchableProductText).includes(normalizedQuery);
+  async getProduct(id: string) : Promise<Product | null> {
+    const product = await this.prisma.product.findUnique({
+      where: { id },
     });
-    return filteredProducts;
+
+    return product ? {
+      ...product,
+      keyIngredients: product.keyIngredients ? JSON.parse(product.keyIngredients) : [],
+    } : null;
   }
 
-  private static getAll() : Product[] {
-    return (productList as Product[])
-      .filter((p): p is Product => p !== null);
-  }
-
-  static getProduct(id : string) : Product | undefined {
-    return (productList as Product[]).find(p => p.id === id);
-  }
-
-  static getProducts(filter? : ProductFilterInput ) : Product[] {
+  async getProducts(filter?: ProductFilterInput) : Promise<Product[] | null> {
     const { lineId, query } = filter || {};
+    const normalizedQuery = normalizeString(query || '');
 
-    let products = this.getAll();
-    if (lineId) {
-      products = this.filterByLineId(products, lineId);
-    }
-    if (query) {
-      products = this.filterByQueryText(products, query);
-    }
-    return products;
+    const products = await this.prisma.product.findMany({
+      where: {
+        AND: [
+          lineId ? { lineId: lineId } : {},
+          query ? {
+            OR: [
+              {
+                searchableText: {
+                  contains: normalizedQuery,
+                },
+              },
+              {
+                line: {
+                  searchableText: {
+                    contains: normalizedQuery,
+                  },
+                },
+              },
+            ],
+          } : {},
+        ],
+      },
+    });
+
+    return products.map(product => ({
+      ...product,
+      keyIngredients: product.keyIngredients ? JSON.parse(product.keyIngredients) : [],
+    }));
   }
 }
