@@ -8,7 +8,7 @@ export class UserService {
     this.prisma = prisma;
   }
 
-  async registerUser( name: string, email: string): Promise<User> {
+  async registerUser(name: string, email: string): Promise<User> {
     try {
       const newUser = await this.prisma.user.create({
         data: { name, email },
