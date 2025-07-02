@@ -1,5 +1,6 @@
 import { Prisma, PrismaClient } from '@prisma/client';
-import { User } from "@/models/user.model";
+import { User, Role } from "@/models/user.model";
+import bcrypt from 'bcrypt';
 
 export class UserService {
   private prisma: PrismaClient;
@@ -8,13 +9,23 @@ export class UserService {
     this.prisma = prisma;
   }
 
-  async registerUser(name: string, email: string): Promise<User> {
+  async registerUser(name: string, email: string, password: string): Promise<User> {
     try {
-      const newUser = await this.prisma.user.create({
-        data: { name, email },
+      const hashedPassword = await bcrypt.hash(password, 10);
+      const prismaUser = await this.prisma.user.create({
+        data: {
+          name,
+          email,
+          password: hashedPassword
+        },
       });
+      const newUser: User = {
+        id: prismaUser.id,
+        email: prismaUser.email,
+        name: prismaUser.name,
+        role: prismaUser.role as Role,
+      };
       return newUser;
-
     } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
         switch (error.code) {

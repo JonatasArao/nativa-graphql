@@ -3,6 +3,7 @@ import { LineService } from '@/services/line.service'
 import { ProductService } from '@/services/product.service'
 import { ProductParent, ProductFilterInput } from '@/models/product.model'
 import { LineFilterInput } from '@/models/line.model'
+import { RegisterUserInput } from '@/models/user.model'
 import { UserService } from '@/services/user.service';
 
 const prisma = new PrismaClient();
@@ -26,8 +27,9 @@ export const resolvers = {
     }
   },
   Mutation : {
-    registerUser: async (_: any, args: { name: string, email: string }) => {
-      return await userService.registerUser(args.name, args.email);
+    registerUser: async (_: any, args: RegisterUserInput) => {
+      const { name, email, password } = args;
+      return await userService.registerUser(name, email, password);
     },
   },
   Product: {

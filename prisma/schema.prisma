@@ -7,6 +7,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  CUSTOMER
+  ADMIN
+}
+
 model Line {
   id          String    @id @default(cuid())
   name        String    @unique
@@ -31,10 +36,26 @@ model Product {
   searchableText   String    @default("")
   line             Line? @relation(fields: [lineId], references: [id])
   lineId           String?
+  reviews          Review[]
 }
 
 model User {
-  id    String @id @default(cuid())
-  email String @unique
-  name  String
+  id       String @id @default(cuid())
+  email    String @unique
+  name     String
+  password String
+  role     Role      @default(CUSTOMER)
+  reviews  Review[]
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  rating    Int
+  comment   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  productId String
+  product   Product  @relation(fields: [productId], references: [id])
 }
