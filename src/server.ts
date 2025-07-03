@@ -1,11 +1,12 @@
 import express from 'express';
 import morgan from 'morgan';
+import path from 'path';
 import apiRoutes from '@/api/routes';
+import { resolvers } from '@/graphql/resolvers';
+import { createContext } from '@/context';
 import { ApolloServer } from '@apollo/server';
 import { expressMiddleware } from '@as-integrations/express5';
 import { readFile } from 'fs/promises';
-import path from 'path';
-import { resolvers } from './graphql/resolvers';
 
 const app = express();
 
@@ -26,7 +27,9 @@ export const startServer = async () => {
   app.use(
     '/graphql',
     express.json(),
-    expressMiddleware(server)
+    expressMiddleware(server, {
+      context: async () => createContext(),
+    })
   );
 
   return app;
