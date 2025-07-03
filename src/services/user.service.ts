@@ -1,33 +1,34 @@
-import { Prisma, PrismaClient } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import { User, Role } from "@/models/user.model";
 import bcrypt from 'bcrypt';
+import { UserRepository } from '@/repositories/user.repository';
 
 export class UserService {
-  private prisma: PrismaClient;
+  private userRepository: UserRepository;
 
-  constructor(prisma: PrismaClient) {
-    this.prisma = prisma;
+  constructor(userRepository: UserRepository) {
+    this.userRepository = userRepository;
   }
 
   async registerUser(name: string, email: string, password: string): Promise<User> {
     try {
       const hashedPassword = await bcrypt.hash(password, 10);
-      const prismaUser = await this.prisma.user.create({
-        data: {
-          name,
-          email,
-          password: hashedPassword
-        },
+
+      const userData = await this.userRepository.create({
+        name,
+        email,
+        password: hashedPassword,
       });
+
       const newUser: User = {
-        id: prismaUser.id,
-        email: prismaUser.email,
-        name: prismaUser.name,
-        role: prismaUser.role as Role,
+        id: userData.id,
+        email: userData.email,
+        name: userData.name,
+        role: userData.role as Role,
       };
       return newUser;
     } catch (error) {
-    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
         switch (error.code) {
           case 'P2002':
             throw new Error('This email address is already in use.');

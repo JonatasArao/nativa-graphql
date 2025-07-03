@@ -1,32 +1,22 @@
-import { PrismaClient } from '@prisma/client';
 import { Line, LineFilterInput } from "@/models/line.model";
+import { LineRepository } from '@/repositories/line.repository';
 import { normalizeString } from '@/utils/string';
 
 export class LineService {
-  private prisma: PrismaClient;
+  private lineRepository: LineRepository;
 
-  constructor(prisma: PrismaClient) {
-    this.prisma = prisma;
+  constructor(lineRepository: LineRepository) {
+    this.lineRepository = lineRepository;
   }
 
   async getLine(id : string): Promise<Line | null> {
-    return await this.prisma.line.findUnique({
-      where: { id },
-    });
+    return await this.lineRepository.findById(id);
   }
 
   async getLines(filter?: LineFilterInput): Promise<Line[] | null> {
     const { query } = filter || {};
     const normalizedQuery = normalizeString(query || '');
 
-    return await this.prisma.line.findMany({
-      where: query
-        ? {
-            searchableText: {
-              contains: normalizedQuery,
-            },
-          }
-        : {},
-    });
+    return await this.lineRepository.findMany({ query: normalizedQuery });
   }
 }

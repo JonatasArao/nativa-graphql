@@ -1,19 +1,16 @@
-import { PrismaClient } from '@prisma/client';
 import { Product, ProductFilterInput } from "@/models/product.model";
+import { ProductRepository } from '@/repositories/product.repository';
 import { normalizeString } from "@/utils/string";
 
 export class ProductService {
-  private prisma: PrismaClient;
+  private productRepository: ProductRepository;
 
-  constructor(prisma: PrismaClient) {
-    this.prisma = prisma;
+  constructor(productRepository: ProductRepository) {
+    this.productRepository = productRepository;
   }
 
   async getProduct(id: string) : Promise<Product | null> {
-    const product = await this.prisma.product.findUnique({
-      where: { id },
-    });
-
+    const product = await this.productRepository.findById(id);
     return product ? {
       ...product,
       keyIngredients: product.keyIngredients ? JSON.parse(product.keyIngredients) : [],
@@ -24,33 +21,14 @@ export class ProductService {
     const { lineId, query } = filter || {};
     const normalizedQuery = normalizeString(query || '');
 
-    const products = await this.prisma.product.findMany({
-      where: {
-        AND: [
-          lineId ? { lineId: lineId } : {},
-          query ? {
-            OR: [
-              {
-                searchableText: {
-                  contains: normalizedQuery,
-                },
-              },
-              {
-                line: {
-                  searchableText: {
-                    contains: normalizedQuery,
-                  },
-                },
-              },
-            ],
-          } : {},
-        ],
-      },
+    const products = await this.productRepository.findMany({
+      lineId,
+      query: normalizedQuery,
     });
 
-    return products.map(product => ({
+    return products ? products.map(product => ({
       ...product,
       keyIngredients: product.keyIngredients ? JSON.parse(product.keyIngredients) : [],
-    }));
+    })) : null;
   }
 }
